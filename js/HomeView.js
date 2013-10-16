@@ -1,4 +1,4 @@
-var HomeView = function(store) {
+var HomeView = function() {
 	this.initialize = function() {
         // Define a div wrapper for the view. The div wrapper is used to attach events.
         this.el = $('<div/>');
@@ -11,7 +11,31 @@ var HomeView = function(store) {
     };
 
     this.findByName = function() {
-	    store.findByName($('.search-key').val(), function(employees) {
+    	/*$.getJSON('http://upsidecorp.net.ve/get_users.php?callback=?','username='+$('.search-key').val(),function(res){
+    		alert('asas');
+		    
+		});*/
+    	$.ajax({
+			type:"GET",
+			url:"http://upsidecorp.net.ve/get_users.php?callback=?",
+			dataType: "jsonp",
+			contentType: "application/json; charset=utf-8",
+			//headers : {Accept : "application/json","Access-Control-Allow-Origin" : "*"},
+			data: { username: $('.search-key').val()},
+			success: function (data) {
+				if(data!=""){
+					$('.employee-list').html(HomeView.liTemplate(data));
+				}else{
+					$('.employee-list').html('No results');
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(xhr.responseText);
+        		//alert(thrownError);
+			}
+		});
+	    /*store.findByName($('.search-key').val(), function(employees) {
 	        $('.employee-list').html(HomeView.liTemplate(employees));
 	        if (self.iscroll) {
 	            console.log('Refresh iScroll');
@@ -20,7 +44,7 @@ var HomeView = function(store) {
 	            console.log('New iScroll');
 	            self.iscroll = new iScroll($('.scroll', self.el)[0], {hScrollbar: false, vScrollbar: false });
 	        }
-	    });
+	    });*/
 	};
  
     this.initialize();
