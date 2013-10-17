@@ -2,7 +2,10 @@ var LoginView = function() {
 	this.initialize = function() {
         // Define a div wrapper for the view. The div wrapper is used to attach events.
         this.el = $('<div/>');
-        //this.el.on('keyup', '.search-key', this.findByName);
+        this.el.on('submit', '#loginForm', this.verifyLogin);
+        //$("#loginForm").on("submit", this.login);
+        // this.loginButton = $('#loginButton');
+        // this.loginButton.('keyup', '.search-key', this.login);
     };
 
     this.render = function() {
@@ -10,41 +13,51 @@ var LoginView = function() {
     	return this;
     };
 
-    this.findByName = function() {
-    	/*$.getJSON('http://upsidecorp.net.ve/get_users.php?callback=?','username='+$('.search-key').val(),function(res){
-    		alert('asas');
-		    
-		});*/
-    	$.ajax({
-			type:"GET",
-			url:"http://upsidecorp.net.ve/get_users.php?callback=?",
-			dataType: "jsonp",
-			contentType: "application/json; charset=utf-8",
-			//headers : {Accept : "application/json","Access-Control-Allow-Origin" : "*"},
-			data: { username: $('.search-key').val()},
-			success: function (data) {
-				if(data!=""){
-					$('.employee-list').html(HomeView.liTemplate(data));
-				}else{
-					$('.employee-list').html('No results');
+    this.verifyLogin = function() {
+    	var username = $('#username');
+		var password = $('#password');
+		var password_md5 = hex_md5(password.val());
+		//console.log(username);
+		if(username.val() != '' && password.val() != ''){
+			//console.log('try to login! - pass: '+password.val());
+			$.getJSON('http://upsidecorp.net.ve/user_login.php?callback=?','username='+username.val()+'&password='+password_md5,function(res){
+	    		//console.log(res.status);
+	    		if(res.status == 'ok'){
+	    			//$('#loginPage').live('pageshow', function(event){
+		                //$.mobile.changePage($("#homePage"));
+		            //});
+	    			
+	    			//$('#user_data').html('<h2>Welcome, '+res.user.name+'!</h2>');
+	    			//$.mobile.changePage("#homePage");
+
+	    			alert('Welcome, '+res.user.name+'!');
+	    		}else{
+	    			alert("Login failed");
+	    		}
+			});
+			/*$.ajax({
+				type:"GET",
+				url:"http://upsidecorp.net.ve/user_login.php?callback=?",
+				dataType: "jsonp",
+				contentType: "application/json; charset=utf-8",
+				//headers : {Accept : "application/json","Access-Control-Allow-Origin" : "*"},
+				data: { username: username, password: password},
+				success: function (data) {
+					console.log('works!');
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);
+	        		//alert(thrownError);
 				}
-			},
-			error: function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.status);
-				console.log(xhr.responseText);
-        		//alert(thrownError);
-			}
-		});
-	    /*store.findByName($('.search-key').val(), function(employees) {
-	        $('.employee-list').html(HomeView.liTemplate(employees));
-	        if (self.iscroll) {
-	            console.log('Refresh iScroll');
-	            self.iscroll.refresh();
-	        } else {
-	            console.log('New iScroll');
-	            self.iscroll = new iScroll($('.scroll', self.el)[0], {hScrollbar: false, vScrollbar: false });
-	        }
-	    });*/
+			});*/
+			//$("#loginButton").attr("disabled","disabled");
+			return false;
+		}else{
+			console.log('incomplete login');
+			alert("Login failed");
+			return false;
+		}
 	};
  
     this.initialize();
@@ -52,3 +65,34 @@ var LoginView = function() {
 
 LoginView.template = Handlebars.compile($("#login-tpl").html());
 //HomeView.liTemplate = Handlebars.compile($("#employee-li-tpl").html());
+
+/*function verifyLogin(){
+	//console.log('login bh!  '+document.getElementById("username").value+' - '+$('#password').val());
+	var username = $('#username');
+	var password = $('#password');
+	var password_md5 = hex_md5(password.val());
+	//console.log(username);
+	if(username.val() != '' && password.val() != ''){
+		//console.log('try to login! - pass: '+hex_md5(password.val()));
+		$.ajax({
+			type:"GET",
+			url:"http://upsidecorp.net.ve/user_login.php?callback=?",
+			dataType: "jsonp",
+			contentType: "application/json; charset=utf-8",
+			//headers : {Accept : "application/json","Access-Control-Allow-Origin" : "*"},
+			data: { username: username, password: password_md5},
+			success: function (data) {
+				console.log('works!');
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(xhr.responseText);
+        		//alert(thrownError);
+			}
+		});
+		//$("#loginButton").attr("disabled","disabled");
+	}else{
+		console.log('incomplete login');
+		alert("Login failed");
+	}
+}*/
