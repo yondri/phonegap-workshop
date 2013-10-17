@@ -12,7 +12,7 @@ var app = {
         var self = this;
         
         //this.store = new WebSqlStore(function() {
-            $('body').html(new HomeView().render().el);
+            $('body').html(new LoginView().render().el);
         //});
     }
 
