@@ -34,6 +34,9 @@ var LoginView = function() {
 	    		}else{
 	    			alert("Login failed");
 	    		}
+			})
+			.fail(function() {
+				console.log( "error" );
 			});
 			/*$.ajax({
 				type:"GET",

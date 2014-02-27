@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns       = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
-        id          = "org.coenraets.registration"
+        id          = "org.cooltribes.registration"
         versionCode = "01"
         version     = "0.1">
  
@@ -11,7 +11,7 @@
         Registration module
     </description>
  
-    <author href="http://cooltries.com" email="yroa@upsidecorp.ch">
+    <author href="http://cooltribes.com" email="yroa@upsidecorp.ch">
         Yondri Roa
     </author>
  
