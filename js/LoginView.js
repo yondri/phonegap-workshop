@@ -19,9 +19,39 @@ var LoginView = function() {
 		var password_md5 = hex_md5(password.val());
 		//console.log(username);
 		if(username.val() != '' && password.val() != ''){
+			$.ajax({
+				type: "POST",
+				url: 'http://kundenrat.gmaare.migros.ch/migros/mobile/server/user_login.php',
+				async: true,
+				beforeSend: function(x) {
+					//alert(username.val());
+				},
+				dataType: "json",
+				data: { username: username.val(), password: password_md5},
+				success: function(res){
+					if(res.status == 'ok'){
+		    			//$('#loginPage').live('pageshow', function(event){
+			                //$.mobile.changePage($("#homePage"));
+			            //});
+		    			
+		    			//$('#user_data').html('<h2>Welcome, '+res.user.name+'!</h2>');
+		    			//$.mobile.changePage("#homePage");
+		    			if (navigator.notification) {
+					        navigator.notification.alert('Welcome, '+res.user.name+'!', null, 'Welcome', 'OK');
+					    } else {
+					        alert('Welcome, '+res.user.name+'!');
+					    }
+		    			//alert('Welcome, '+res.user.name+'!');
+		    		}else{
+		    			alert("Login failed");
+		    		}
+				}
+			});
+
+
 			//console.log('try to login! - pass: '+password.val());
-			$.getJSON('http://upsidecorp.net.ve/user_login.php?callback=?','username='+username.val()+'&password='+password_md5,function(res){
-	    		//console.log(res.status);
+			/*$.getJSON('http://kundenrat.gmaare.migros.ch/migros/mobile/user_login.php?callback=?','username='+username.val()+'&password='+password_md5,function(res){
+	    		console.log(res.status);
 	    		if(res.status == 'ok'){
 	    			//$('#loginPage').live('pageshow', function(event){
 		                //$.mobile.changePage($("#homePage"));
@@ -29,15 +59,19 @@ var LoginView = function() {
 	    			
 	    			//$('#user_data').html('<h2>Welcome, '+res.user.name+'!</h2>');
 	    			//$.mobile.changePage("#homePage");
-
-	    			alert('Welcome, '+res.user.name+'!');
+	    			if (navigator.notification) {
+				        navigator.notification.alert('Welcome, '+res.user.name+'!', null, 'Welcome', 'OK');
+				    } else {
+				        alert('Welcome, '+res.user.name+'!');
+				    }
+	    			//alert('Welcome, '+res.user.name+'!');
 	    		}else{
 	    			alert("Login failed");
 	    		}
 			})
 			.fail(function() {
 				console.log( "error" );
-			});
+			});*/
 			/*$.ajax({
 				type:"GET",
 				url:"http://upsidecorp.net.ve/user_login.php?callback=?",
